@@ -14,7 +14,7 @@ model Image {
   id                    String    @id @default(uuid())
   originalFilename      String    @map("original_filename")
   originalFileExtension String    @map("original_file_extension")
-  originalFiletype      String    @map("original_filetype")
+  originalFileMimiType  String    @map("original_file_mimi_type")
   createdAt             DateTime  @default(now()) @map("created_at")
   updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at")
   deletedAt             DateTime? @map("deleted_at")

@@ -12,3 +12,7 @@ export const imageTypes = {
 } satisfies Record<string, { ext: 'webp' | 'original'; size?: { width: number; height: number } }>
 
 export type ImageType = keyof typeof imageTypes
+
+export function isValidImageType(value: string): value is ImageType {
+    return Object.keys(imageTypes).includes(value)
+}

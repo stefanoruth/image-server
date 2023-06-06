@@ -6,8 +6,6 @@ import path from 'path'
 export const uploadImage: RequestHandler = async (req, res, next) => {
     let images = req.files?.images
 
-    console.log(req.files)
-
     if (typeof images === 'undefined') {
         return next(new Error('Missing files'))
     }
@@ -17,15 +15,17 @@ export const uploadImage: RequestHandler = async (req, res, next) => {
     }
 
     for (const image of images) {
-        // Store image
-
         const entity = await database.image.create({
             select: { id: true },
-            data: { originalFilename: image.name, originalFiletype: image.mimetype },
+            data: {
+                originalFilename: image.name,
+                originalFileMimiType: image.mimetype,
+                originalFileExtension: path.extname(image.name),
+            },
         })
 
         await saveFile(entity.id, path.extname(image.name), 'original', image.data)
     }
 
-    res.json(true)
+    return res.redirect('/')
 }
