@@ -9,6 +9,13 @@ export const imageTypes = {
             height: 1500,
         },
     },
+    steru: {
+        ext: 'webp',
+        size: {
+            width: 600,
+            height: 400,
+        },
+    },
 } satisfies Record<string, { ext: 'webp' | 'original'; size?: { width: number; height: number } }>
 
 export type ImageType = keyof typeof imageTypes

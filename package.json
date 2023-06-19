@@ -5,7 +5,9 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "generateFormats": "ts-node src/GenerateFormats.ts",
+        "clean": "rm -rf dist && rm -rf prisma/dev.db && rm -rf prisma/dev.db-journal && ts-node src/CleanImageFolders.ts",
+        "setup": "prisma migrate dev && prisma generate",
+        "generate": "ts-node src/GenerateFormats.ts",
         "dev": "nodemon"
     },
     "dependencies": {

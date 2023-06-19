@@ -32,3 +32,10 @@ export async function folderExists(folderName: string): Promise<boolean> {
         .then(() => true)
         .catch(() => false)
 }
+
+export async function fileExists(file: string) {
+    return fs
+        .access(file, fs.constants.F_OK)
+        .then(() => true)
+        .catch(() => false)
+}

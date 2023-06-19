@@ -2,6 +2,7 @@ import { RequestHandler } from 'express'
 import { saveFile } from './Storage'
 import { database } from './Database'
 import path from 'path'
+import { sendPubsubMessage } from './Redis'
 
 export const uploadImage: RequestHandler = async (req, res, next) => {
     let images = req.files?.images
@@ -25,6 +26,8 @@ export const uploadImage: RequestHandler = async (req, res, next) => {
         })
 
         await saveFile(entity.id, path.extname(image.name), 'original', image.data)
+
+        await sendPubsubMessage('newImage', { id: entity.id })
     }
 
     return res.redirect('/')

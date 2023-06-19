@@ -18,7 +18,10 @@ export async function sendPubsubMessage<T extends Topic>(topic: T, message: Topi
     await redis.publish(topic, JSON.stringify(message))
 }
 
-export async function receivePubsubMessage<T extends Topic>(topic: T, handler: (message: Topics[T]) => Promise<void>) {
+export async function startListenForPubsubMessages<T extends Topic>(
+    topic: T,
+    handler: (message: Topics[T]) => Promise<void>
+) {
     await pubsub.subscribe(topic, (rawMessage, channel) => {
         const message = JSON.parse(rawMessage) as Topics[T]
 
