@@ -11,7 +11,7 @@ export const imageTypes = {
     },
     steru: {
         ext: 'webp',
-        quality: 80,
+        quality: 75,
         size: {
             width: 600,
             height: 400,
