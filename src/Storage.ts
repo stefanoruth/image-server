@@ -10,8 +10,16 @@ export function getImagesPath(): string {
     return path.join(getStoragePath(), 'images')
 }
 
+export function getImagePath(filename: string): string {
+    return path.join(getImagesPath(), filename)
+}
+
 export async function getImageFile(filename: string) {
-    return fs.readFile(path.join(getImagesPath(), filename))
+    return fs.readFile(getImagePath(filename))
+}
+
+export async function readFile(filename: string) {
+    return fs.readFile(path.join(getStoragePath(), filename))
 }
 
 export async function saveFile(id: string, ext: string, type: ImageType, data: Buffer) {

@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import fileUpload from 'express-fileupload'
 import compression from 'compression'
 import { createTerminus } from '@godaddy/terminus'
@@ -13,6 +13,11 @@ app.use(compression())
 app.use(express.json())
 app.use(fileUpload())
 app.use(router)
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(error)
+
+    return next(error)
+})
 
 redis.connect()
 pubsub.connect()
@@ -20,7 +25,7 @@ pubsub.connect()
 startListenForPubsubMessages('newImage', async message => {
     console.log({ message })
 
-    await processImage(message.id)
+    await processImage(message.id, false)
 })
 
 const server = app.listen(3000, () => console.log('Started: http://localhost:3000'))

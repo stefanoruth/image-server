@@ -1,20 +1,29 @@
 import { RequestHandler } from 'express'
-import { getImageFile } from './Storage'
+import { fileExists, getImageFile, getImagePath } from './Storage'
 import { isValidImageType } from './Image'
 import { getUuidFromFileName } from './Helpers'
 import path from 'path'
 
 export const showImage: RequestHandler = async (req, res, next) => {
-    const type = req.params.type
+    try {
+        const type = req.params.type
 
-    if (!isValidImageType(type)) {
-        return next(new Error('Invalid image type'))
+        if (!isValidImageType(type)) {
+            throw new Error('Invalid image type')
+        }
+
+        const id = getUuidFromFileName(req.params.file)
+        const ext = path.extname(req.params.file)
+        const filepath = path.join(id, type + ext)
+
+        if (!(await fileExists(getImagePath(filepath)))) {
+            throw new Error(`Missing file: "${filepath}"`)
+        }
+
+        const image = await getImageFile(path.join(id, type + ext))
+
+        res.contentType('image/webp').send(image)
+    } catch (error) {
+        return next(error)
     }
-
-    const id = getUuidFromFileName(req.params.file)
-    const ext = path.extname(req.params.file)
-
-    const image = await getImageFile(path.join(id, type + ext))
-
-    res.send(image)
 }

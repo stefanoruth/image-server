@@ -11,12 +11,26 @@ export const imageTypes = {
     },
     steru: {
         ext: 'webp',
+        quality: 80,
         size: {
             width: 600,
             height: 400,
         },
     },
-} satisfies Record<string, { ext: 'webp' | 'original'; size?: { width: number; height: number } }>
+    jpegx2: {
+        ext: 'jpeg',
+        quality: 75,
+        watermark: true,
+    },
+} satisfies Record<
+    string,
+    {
+        ext: 'webp' | 'original' | 'jpeg'
+        size?: { width: number; height: number }
+        quality?: number
+        watermark?: boolean
+    }
+>
 
 export type ImageType = keyof typeof imageTypes
 

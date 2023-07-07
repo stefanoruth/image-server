@@ -2,7 +2,9 @@ import { parseArgs } from 'node:util'
 import { database } from './Database'
 import { processImage } from './ProcessImage'
 
-const { values: args } = parseArgs({ options: { cursor: { type: 'string' } } })
+const { values: args } = parseArgs({
+    options: { cursor: { type: 'string' }, id: { type: 'string' }, override: { type: 'boolean' } },
+})
 const take = 10
 
 async function run() {
@@ -11,19 +13,14 @@ async function run() {
     do {
         const images = await database.image.findMany({
             select: { id: true },
-            where: { deletedAt: null },
+            where: { deletedAt: null, id: args.id },
             orderBy: { createdAt: 'asc' },
             take,
         })
 
         cursor = images.length === take ? images.at(-1)?.id : undefined
 
-        for (const image of images) {
-            // image
-            console.log({ image })
-
-            await processImage(image.id)
-        }
+        await Promise.all(images.map(image => processImage(image.id, args.override || false)))
     } while (cursor)
 }
 
