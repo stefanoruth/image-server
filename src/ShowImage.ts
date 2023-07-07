@@ -22,7 +22,9 @@ export const showImage: RequestHandler = async (req, res, next) => {
 
         const image = await getImageFile(path.join(id, type + ext))
 
-        res.contentType('image/webp').send(image)
+        res.set('Cache-Control', 'max-age=31536000, public')
+        res.type(ext)
+        res.send(image)
     } catch (error) {
         return next(error)
     }
